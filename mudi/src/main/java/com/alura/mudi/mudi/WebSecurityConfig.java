@@ -36,13 +36,13 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/usuario/pedido",true)
                         .permitAll()
                 )
-                .logout().logoutSuccessUrl("/home");
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/home");
         return http.build();
     }
     @Bean
     UserDetailsManager users(DataSource dataSource) {
         UserDetails admin = User.builder()
-                .username("adng")
+                .username("ang")
                 .password(passwordEncoder.encode("123456"))
                 .roles("USER", "ADMIN")
                 .build();
