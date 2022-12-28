@@ -28,6 +28,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
+                .requestMatchers("/home/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
@@ -41,7 +42,7 @@ public class WebSecurityConfig {
     @Bean
     UserDetailsManager users(DataSource dataSource) {
         UserDetails admin = User.builder()
-                .username("adnggttGgn")
+                .username("adng")
                 .password(passwordEncoder.encode("123456"))
                 .roles("USER", "ADMIN")
                 .build();
