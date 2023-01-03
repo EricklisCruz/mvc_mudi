@@ -2,6 +2,7 @@ package com.alura.mudi.mudi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -11,11 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Controller;
 
 import javax.sql.DataSource;
 
-@Controller
+@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
@@ -27,7 +27,10 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
+
+        http
+
+                .authorizeHttpRequests()
                 .requestMatchers("/home/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -36,18 +39,20 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/usuario/pedido",true)
                         .permitAll()
                 )
+                .csrf().disable()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/home");
         return http.build();
     }
     @Bean
     UserDetailsManager users(DataSource dataSource) {
-        UserDetails admin = User.builder()
-                .username("admin")
+        /*UserDetails admin = User.builder()
+                .username("admi")
                 .password(passwordEncoder.encode("123456"))
                 .roles("USER", "ADMIN")
-                .build();
+                .build();*/
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.createUser(admin);
+        //users.createUser(admin);
         return users;
     }
+
 }
